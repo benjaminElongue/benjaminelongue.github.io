@@ -1,227 +1,742 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benjamin ELONGUE — Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f5ef">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}
+if(t!=="dark"&&t!=="light"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}
+document.documentElement.dataset.theme=t})();
+</script>
+<title>Benjamin ELONGUE — Portfolio</title>
+<meta name="description" content="Portfolio de Benjamin ELONGUE — Développeur senior / Ingénieur IA et Technicien informatique senior, Montréal.">
+<style>
+:root{
+  /* THEME CLAIR (par défaut si le système est en clair) */
+  --bg:#f7f5ef; --bg2:#eef2f8; --card:rgba(255,255,255,.72);
+  --line:rgba(37,99,235,.16); --text:#12233f; --muted:#5a6b85;
+  --a1:#2563eb; --a2:#0ea5e9; --a3:#1d4ed8;
+  --g1:#0ea5e9; --g2:#2563eb; --g3:#1e40af;
+  --grad:linear-gradient(120deg,var(--g1) 0%,var(--g2) 55%,var(--g3) 100%);
+  --glow1:rgba(37,99,235,.10); --glow2:rgba(14,165,233,.13);
+  --blob1:#60a5fa; --blob2:#38bdf8; --blob3:#93c5fd; --blob-op:.28;
+  --header-bg:rgba(247,245,239,.78); --on-grad:#ffffff;
+  --soft:rgba(37,99,235,.10); --badge-text:#1e40af; --title-text:#1e3a8a; --dot:#2563eb;
+  --chip-bg:rgba(255,255,255,.85); --chip-text:#1e3a8a; --chip-hover-bg:rgba(37,99,235,.12); --chip-hover-text:#0b2a6f;
+  --body-text:#34476a; --tag-bg:rgba(37,99,235,.10); --tag-text:#1d4ed8; --ghost-bg:rgba(255,255,255,.7);
+  --shadow:0 12px 32px -20px rgba(30,64,175,.4); --shadow-hover:0 18px 40px -20px rgba(30,64,175,.5);
+  --hover-border:rgba(37,99,235,.45); --spot:rgba(37,99,235,.10); --btn-glow:rgba(37,99,235,.45);
+  --particle-rgb:37,99,235; --particle-dot:.5; --particle-line:.14;
+  --radius:18px; color-scheme:light;
+}
+:root[data-theme="dark"]{
+  /* THEME SOMBRE */
+  --bg:#040e1d; --bg2:#06182e; --card:rgba(14,40,78,.42);
+  --line:rgba(120,170,255,.18); --text:#e8f0fc; --muted:#9db3d0;
+  --a1:#4aa8ff; --a2:#7cc4ff; --a3:#2563eb;
+  --g1:#7cc4ff; --g2:#4a9dff; --g3:#3b6cf0;
+  --glow1:rgba(30,80,200,.38); --glow2:rgba(14,100,170,.32);
+  --blob1:#2563eb; --blob2:#0ea5e9; --blob3:#3b82f6; --blob-op:.28;
+  --header-bg:rgba(4,14,29,.6); --on-grad:#031124;
+  --soft:rgba(74,168,255,.12); --badge-text:#c3deff; --title-text:#d3e4ff; --dot:#4aa8ff;
+  --chip-bg:rgba(4,14,29,.5); --chip-text:#d6e6ff; --chip-hover-bg:rgba(74,168,255,.18); --chip-hover-text:#ffffff;
+  --body-text:#bccde6; --tag-bg:rgba(96,165,250,.12); --tag-text:#9fdcff; --ghost-bg:rgba(255,255,255,.03);
+  --shadow:0 12px 32px -20px rgba(0,0,0,.6); --shadow-hover:0 18px 40px -20px rgba(74,168,255,.35);
+  --hover-border:rgba(74,168,255,.45); --spot:rgba(74,168,255,.16); --btn-glow:rgba(74,168,255,.7);
+  --particle-rgb:140,190,255; --particle-dot:.75; --particle-line:.16;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Inter,system-ui,-apple-system,Roboto,Arial,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden;
+  background-image:
+    radial-gradient(1200px 700px at 10% -10%,var(--glow1),transparent 60%),
+    radial-gradient(1000px 700px at 100% 10%,var(--glow2),transparent 60%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+  background-attachment:fixed;
+}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:var(--blob-op);z-index:0;pointer-events:none;animation:float 22s ease-in-out infinite}
+.blob.b1{width:420px;height:420px;background:var(--blob1);top:8%;left:-120px}
+.blob.b2{width:480px;height:480px;background:var(--blob2);bottom:-120px;right:-140px;animation-delay:-8s}
+.blob.b3{width:300px;height:300px;background:var(--blob3);top:45%;left:55%;animation-delay:-14s;opacity:calc(var(--blob-op)*.65)}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,-40px) scale(1.1)}66%{transform:translate(-40px,50px) scale(.95)}}
+main,header,footer{position:relative;z-index:1}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1120px,92%);margin:0 auto}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* NAV */
+header{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(14px);background:var(--header-bg);border-bottom:1px solid var(--line);transition:transform .35s}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-weight:800;letter-spacing:.5px;font-size:1.1rem;display:flex;align-items:center;gap:.6rem}
+.logo i{font-style:normal;display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:var(--grad);color:var(--on-grad);font-weight:900}
+nav ul{display:flex;gap:.3rem;list-style:none}
+nav button.link{background:none;border:0;color:var(--muted);font:inherit;font-size:.92rem;padding:.5rem .85rem;border-radius:999px;cursor:pointer;transition:.25s}
+nav button.link:hover,nav button.link.active{color:var(--text);background:var(--soft)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--muted);font:inherit;font-weight:700;font-size:.82rem;padding:.4rem .8rem;cursor:pointer;transition:.25s}
+.lang button.on{background:var(--grad);color:var(--on-grad)}
+.progress{position:absolute;bottom:-1px;left:0;height:2px;width:0;background:var(--grad)}
+@media(max-width:860px){nav ul{display:none}}
+.tools{display:flex;align-items:center;gap:.6rem}
+.theme-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--ghost-bg);color:var(--text);display:grid;place-items:center;cursor:pointer;transition:transform .3s,border-color .3s,background .3s}
+.theme-btn:hover{border-color:var(--a1);transform:rotate(18deg)}
+.theme-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.theme-btn .i-sun{display:none}
+:root[data-theme="dark"] .theme-btn .i-sun{display:block}
+:root[data-theme="dark"] .theme-btn .i-moon{display:none}
 
-        body {
-            min-height: 100vh;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f8f8fc;
-            color: #151515;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 70px}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center}
+.hero.has-photo .hero-grid{grid-template-columns:1.4fr .8fr}
+@media(max-width:860px){.hero.has-photo .hero-grid{grid-template-columns:1fr}.photo-wrap{order:-1;justify-self:center}}
+.badge{display:inline-flex;align-items:center;gap:.55rem;padding:.4rem .95rem;border:1px solid var(--line);border-radius:999px;background:var(--soft);font-size:.85rem;color:var(--badge-text)}
+.badge .dot{width:9px;height:9px;border-radius:50%;background:var(--dot);box-shadow:0 0 0 0 rgba(74,168,255,.7);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 12px rgba(74,168,255,0)}100%{box-shadow:0 0 0 0 rgba(74,168,255,0)}}
+h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.08;margin:1.2rem 0 .6rem;font-weight:800;letter-spacing:-1px}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.title-line{font-size:clamp(1.1rem,2.4vw,1.5rem);color:var(--title-text);font-weight:600}
+.typed{min-height:2.2rem;font-size:clamp(1.05rem,2.2vw,1.35rem);color:var(--a1);font-family:Consolas,"Courier New",monospace;margin-top:.6rem}
+.lead{color:var(--muted);max-width:640px;margin:1.3rem 0 1.8rem;font-size:1.05rem}
+.cta{display:flex;flex-wrap:wrap;gap:.9rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;border-radius:14px;font-weight:700;border:1px solid transparent;cursor:pointer;font-size:.98rem;transition:transform .25s,box-shadow .25s;font-family:inherit}
+.btn.primary{background:var(--grad);color:var(--on-grad);box-shadow:0 10px 30px -10px var(--btn-glow)}
+.btn.ghost{background:var(--ghost-bg);color:var(--text);border-color:var(--line)}
+.btn:hover{transform:translateY(-3px)}
+.btn.ghost:hover{border-color:var(--a1);box-shadow:0 10px 30px -14px var(--a1)}
 
-        .hero {
-            width: min(1100px, 92%);
-            min-height: 520px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 70px;
-            padding: 50px;
-        }
+.photo-wrap{position:relative;width:min(340px,70vw);aspect-ratio:1;display:none}
+.hero.has-photo .photo-wrap{display:block;animation:pop .9s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes pop{from{opacity:0;transform:scale(.8) rotate(-4deg)}}
+.photo-wrap::before{content:"";position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 0deg,var(--g1),var(--g2),var(--g3),var(--g1));filter:blur(2px);animation:spin 8s linear infinite}
+.photo-wrap::after{content:"";position:absolute;inset:-6px;border-radius:50%;background:var(--bg)}
+.photo-wrap img{position:relative;z-index:2;width:100%;height:100%;object-fit:cover;border-radius:50%}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-        .content {
-            flex: 1;
-            max-width: 560px;
-        }
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-top:3.2rem}
+.stat{padding:1.3rem 1.2rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);backdrop-filter:blur(8px);text-align:center;transition:.3s}
+.stat:hover{transform:translateY(-6px);border-color:var(--hover-border)}
+.stat b{display:block;font-size:2.3rem;line-height:1.1;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:.88rem;color:var(--muted)}
 
-        .content .hello {
-            font-size: 18px;
-            font-weight: 600;
-            color: #6b4ce6;
-            margin-bottom: 12px;
-        }
+/* SECTIONS */
+section.sec{padding:90px 0}
+.sec-head{margin-bottom:2.6rem}
+.sec-head small{color:var(--a1);font-family:Consolas,monospace;letter-spacing:2px;text-transform:uppercase;font-size:.8rem}
+.sec-head h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-top:.3rem;position:relative;display:inline-block}
+.sec-head h2::after{content:"";display:block;height:4px;width:120px;border-radius:4px;background:var(--grad);margin-top:.6rem}
 
-        h1 {
-            font-size: clamp(42px, 6vw, 76px);
-            line-height: 1.02;
-            letter-spacing: -3px;
-            margin-bottom: 24px;
-        }
+.card{position:relative;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);backdrop-filter:blur(8px);padding:1.6rem;overflow:hidden;box-shadow:var(--shadow);transition:transform .3s,border-color .3s,box-shadow .3s}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(380px circle at var(--mx,50%) var(--my,0%),var(--spot),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover{border-color:var(--hover-border);box-shadow:var(--shadow-hover)}
+.card:hover::before{opacity:1}
 
-        h1 span {
-            color: #6b4ce6;
-        }
+.highlights{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem}
+.hl .ico{width:52px;height:52px;display:grid;place-items:center;font-size:1.6rem;border-radius:14px;background:var(--soft);border:1px solid var(--line);margin-bottom:1rem}
+.hl h3{font-size:1.15rem;margin-bottom:.4rem}
+.hl p{color:var(--muted);font-size:.95rem}
+.hl:hover{transform:translateY(-6px)}
 
-        .message {
-            font-size: 18px;
-            line-height: 1.7;
-            color: #62626b;
-            max-width: 440px;
-        }
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem;margin-top:1.4rem}
+.skills h3{font-size:1rem;color:var(--a1);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{font-size:.84rem;padding:.35rem .8rem;border-radius:999px;border:1px solid var(--line);background:var(--chip-bg);color:var(--chip-text);opacity:0;transform:translateY(10px) scale(.95);transition:opacity .5s,transform .5s,background .25s,border-color .25s,color .25s}
+.in .chip{opacity:1;transform:none}
+.chip:hover{background:var(--chip-hover-bg);border-color:var(--a1);color:var(--chip-hover-text);transform:translateY(-2px)}
 
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-            margin-top: 30px;
-            padding: 12px 18px;
-            border-radius: 8px;
-            background: #6b4ce6;
-            color: white;
-            font-size: 13px;
-            font-weight: 600;
-            box-shadow: 0 8px 25px rgba(107, 76, 230, .22);
-        }
+.timeline{position:relative;padding-left:2rem}
+.timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:0;width:2px;background:linear-gradient(var(--a2),var(--a1),transparent)}
+.job{position:relative;margin-bottom:1.6rem}
+.job::before{content:"";position:absolute;left:-2rem;top:1.6rem;width:16px;height:16px;border-radius:50%;background:var(--bg);border:3px solid var(--a1);box-shadow:0 0 0 6px var(--soft)}
+.job-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem;align-items:baseline}
+.job h3{font-size:1.2rem}
+.job .org{color:var(--a1);font-weight:600}
+.job .date{font-family:Consolas,monospace;font-size:.82rem;color:var(--muted);padding:.2rem .7rem;border:1px solid var(--line);border-radius:999px}
+.job ul{margin:1rem 0 0 1.1rem;color:var(--body-text)}
+.job li{margin:.35rem 0;font-size:.95rem}
+.job li::marker{color:var(--a1)}
+.tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1rem}
+.tag{font-size:.74rem;padding:.2rem .6rem;border-radius:6px;background:var(--tag-bg);color:var(--tag-text)}
 
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #fff;
-            animation: pulse 1.5s infinite;
-        }
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.2rem}
+.proj h3{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:1.15rem;margin-bottom:.3rem}
+.proj .link{font-size:.82rem;color:var(--a1);font-family:Consolas,monospace}
+.proj>p{color:var(--muted);font-size:.93rem;margin-bottom:.6rem}
+.proj ul{margin-left:1.1rem;color:var(--body-text);font-size:.92rem}
+.proj li::marker{color:var(--a1)}
+.proj:hover{transform:translateY(-6px)}
 
-        .visual {
-            position: relative;
-            width: 390px;
-            height: 390px;
-            flex: 0 0 390px;
-        }
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem}
+.card h3.t{font-size:1.1rem;margin-bottom:1rem;color:var(--a1)}
+.list{list-style:none}
+.list li{padding:.55rem 0;border-bottom:1px dashed var(--line);display:flex;gap:.7rem;align-items:flex-start;font-size:.95rem}
+.list li:last-child{border:0}
+.list .y{margin-left:auto;font-family:Consolas,monospace;color:var(--muted);font-size:.82rem;white-space:nowrap}
+.list small{display:block;color:var(--muted)}
 
-        .circle {
-            position: absolute;
-            width: 330px;
-            height: 330px;
-            border-radius: 50%;
-            background: #6b4ce6;
-            top: 20px;
-            left: 25px;
-        }
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem}
+.contact a.card{display:block;text-align:center}
+.contact a.card:hover{transform:translateY(-6px)}
+.contact .ico{font-size:1.8rem;margin-bottom:.5rem}
+.contact b{display:block;margin-bottom:.2rem}
+.contact span{color:var(--muted);font-size:.93rem;word-break:break-word}
+footer{padding:36px 0;text-align:center;color:var(--muted);border-top:1px solid var(--line);font-size:.88rem}
 
-        .shape {
-            position: absolute;
-            width: 290px;
-            height: 290px;
-            border-radius: 48% 52% 50% 50%;
-            background: linear-gradient(145deg, #ffffff, #e7e7ed);
-            right: 5px;
-            bottom: 10px;
-            transform: rotate(-5deg);
-            box-shadow:
-                0 25px 45px rgba(0, 0, 0, .12),
-                inset -12px -12px 25px rgba(0, 0, 0, .04),
-                inset 12px 12px 25px rgba(255, 255, 255, .9);
-        }
+/* reveal */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.hero .stagger>*{opacity:0;transform:translateY(24px);animation:up .8s cubic-bezier(.2,.7,.2,1) forwards}
+.hero .stagger>*:nth-child(1){animation-delay:.1s}.hero .stagger>*:nth-child(2){animation-delay:.25s}
+.hero .stagger>*:nth-child(3){animation-delay:.4s}.hero .stagger>*:nth-child(4){animation-delay:.55s}
+.hero .stagger>*:nth-child(5){animation-delay:.7s}.hero .stagger>*:nth-child(6){animation-delay:.85s}
+@keyframes up{to{opacity:1;transform:none}}
+.hero .stagger>h1,.hero .stagger>.title-line,.hero .stagger>.typed{opacity:1;transform:none;animation:none}
 
-        .shape::before {
-            content: "";
-            position: absolute;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.72);
-            top: 48px;
-            left: 42px;
-            box-shadow: 130px 40px 0 rgba(255,255,255,.5);
-        }
-
-        .shape::after {
-            content: "";
-            position: absolute;
-            width: 110px;
-            height: 25px;
-            border-radius: 50%;
-            background: rgba(0,0,0,.04);
-            bottom: 55px;
-            left: 90px;
-            filter: blur(10px);
-        }
-
-        .floating {
-            position: absolute;
-            width: 95px;
-            height: 95px;
-            border-radius: 50%;
-            background: #6b4ce6;
-            right: 0;
-            top: 15px;
-            opacity: .12;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: .45; transform: scale(.75); }
-        }
-
-        @media (max-width: 760px) {
-            body {
-                overflow: auto;
-            }
-
-            .hero {
-                min-height: 100vh;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                padding: 35px 20px;
-                gap: 35px;
-            }
-
-            .content {
-                order: 1;
-            }
-
-            .visual {
-                order: 2;
-                width: 300px;
-                height: 300px;
-                transform: scale(.78);
-                margin-top: -20px;
-                margin-bottom: -55px;
-            }
-
-            .message {
-                margin: auto;
-            }
-
-            h1 {
-                letter-spacing: -2px;
-            }
-        }
-    </style>
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal,.chip,.hero .stagger>*{opacity:1!important;transform:none!important}
+  #bg-canvas,.blob{display:none}
+}
+</style>
 </head>
-
 <body>
+<canvas id="bg-canvas"></canvas>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
 
-    <main class="hero">
-        <section class="content">
-            <div class="hello">Bonjour, je suis</div>
+<header>
+  <div class="wrap nav">
+    <div class="logo"><i>BE</i><span>Benjamin ELONGUE</span></div>
+    <nav><ul id="navlinks"></ul></nav>
+    <div class="tools">
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="fr">FR</button><button data-lang="en">EN</button>
+      </div>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Theme" title="Theme">
+        <svg class="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
 
-            <h1>
-                Benjamin<br>
-                <span>ELONGUE</span>
-            </h1>
+<main id="app"></main>
+<footer><div class="wrap" id="footer"></div></footer>
 
-            <p class="message">
-                Portfolio en cours de construction.
-            </p>
+<script>
+/* =========================================================
+   PORTFOLIO — Benjamin ELONGUE
+   Lien unique :  index.html        -> profil DEV (par défaut)
+                  index.html#dev    -> profil DEV
+                  index.html#ti     -> profil TI
+   Photo (facultative) : placez photo.jpg (ou .jpeg/.png/.webp)
+   dans le même dossier que ce fichier.
+   ========================================================= */
 
-            <div class="badge">
-                <span class="dot"></span>
-                Bientôt disponible
-            </div>
-        </section>
+/* Début de carrière : le nombre d'années augmente automatiquement chaque année */
+const START_YEAR = 2020;
+const YEARS = new Date().getFullYear() - START_YEAR;
+const fx = s => s.replace(/\{Y\}/g, YEARS);
 
-        <section class="visual" aria-hidden="true">
-            <div class="circle"></div>
-            <div class="floating"></div>
-            <div class="shape"></div>
-        </section>
-    </main>
+const PERSON = {
+  name: "Benjamin ELONGUE",
+  email: "eshbaelongue@gmail.com",
+  phone: "613 796 4921",
+  location: {fr:"Canada (ouvert à la relocalisation) · Travail hybride, en présentiel ou en télétravail", en:"Canada (open to relocation) · Hybrid, on-site or remote work"}
+};
 
+const UI = {
+  fr: {
+    nav: {about:"Atouts", skills:"Compétences", exp:"Expérience", proj:"Projets", edu:"Formation", contact:"Contact"},
+    avail: "Disponible immédiatement · Ouvert à la relocalisation",
+    contactBtn: "Me contacter", emailBtn: "Écrire un courriel",
+    secs: {
+      about:["Atouts clés","Compétences clés"],
+      skills:["Boîte à outils","Compétences techniques"],
+      exp:["Parcours","Expérience professionnelle"],
+      proj:["Réalisations","Quelques projets"],
+      edu:["Parcours académique","Formation, certifications & bénévolat"],
+      contact:["Parlons-en","Contact"]
+    },
+    edu:"Formation", cert:"Certifications", vol:"Bénévolat", lang:"Langues",
+    mail:"Courriel", tel:"Téléphone", loc:"Localisation",
+    ref:"Références disponibles sur demande", rights:"Tous droits réservés"
+  },
+  en: {
+    nav: {about:"Strengths", skills:"Skills", exp:"Experience", proj:"Projects", edu:"Education", contact:"Contact"},
+    avail: "Available immediately · Open to relocation",
+    contactBtn: "Get in touch", emailBtn: "Send an email",
+    secs: {
+      about:["Key strengths","Key skills"],
+      skills:["Toolbox","Technical skills"],
+      exp:["Career","Professional experience"],
+      proj:["Work","Selected projects"],
+      edu:["Background","Education, certifications & volunteering"],
+      contact:["Let's talk","Contact"]
+    },
+    edu:"Education", cert:"Certifications", vol:"Volunteering", lang:"Languages",
+    mail:"Email", tel:"Phone", loc:"Location",
+    ref:"References available upon request", rights:"All rights reserved"
+  }
+};
+
+const PROFILES = {
+/* ======================= DEV ======================= */
+dev: {
+  docTitle: {fr:"Benjamin ELONGUE — Développeur senior · Ingénieur IA", en:"Benjamin ELONGUE — Senior Developer · AI Engineer"},
+  title: {fr:"Développeur senior – Ingénieur IA", en:"Senior Developer – AI Engineer"},
+  roles: {
+    fr:["Développeur Full Stack senior","Ingénieur IA","Java · Spring Boot","PHP · Laravel","Python · Django","Cloud AWS · CI/CD"],
+    en:["Senior Full Stack Developer","AI Engineer","Java · Spring Boot","PHP · Laravel","Python · Django","AWS Cloud · CI/CD"]
+  },
+  summary: {
+    fr:"Développeur Full Stack Java & PHP avec plus de {Y} années d'expérience dans la conception, le développement et l'évolution d'applications d'entreprise à forte volumétrie. Spécialiste de Java / Spring Boot, de PHP / Laravel et de Python / Django, des architectures microservices, des API sécurisées, des CRM et des environnements transactionnels. Orienté qualité logicielle, cloud, agilité et intégration de l'intelligence artificielle.",
+    en:"Java & PHP Full Stack Developer with over {Y} years of experience designing, building and evolving high-volume enterprise applications. Specialist in Java / Spring Boot, PHP / Laravel and Python / Django, microservices architectures, secure APIs, CRMs and transactional environments. Focused on software quality, cloud, agile delivery and the integration of artificial intelligence."
+  },
+  stats: [
+    {n:YEARS, s:"+", l:{fr:"années d'expérience", en:"years of experience"}},
+    {n:2000, s:"+", l:{fr:"utilisateurs actifs / jour", en:"daily active users"}},
+    {n:2, s:{fr:" Md XAF+", en:" B XAF+"}, l:{fr:"de chiffre d'affaires supporté", en:"in revenue supported"}},
+    {n:4, s:"", l:{fr:"certifications AWS & Scrum", en:"AWS & Scrum certifications"}}
+  ],
+  highlights: [
+    {i:"☕", t:{fr:"Java & Spring Boot", en:"Java & Spring Boot"}, d:{fr:"Applications d'entreprise, API REST, microservices, Thymeleaf, tests JUnit et pipelines Jenkins / Maven.", en:"Enterprise applications, REST APIs, microservices, Thymeleaf, JUnit tests and Jenkins / Maven pipelines."}},
+    {i:"🐘", t:{fr:"PHP & Laravel", en:"PHP & Laravel"}, d:{fr:"Laravel 7+, files d'attente, API sécurisées, PHPUnit, Pest, Laravel Dusk, Composer.", en:"Laravel 7+, queues, secure APIs, PHPUnit, Pest, Laravel Dusk, Composer."}},
+    {i:"🐍", t:{fr:"Python & Django", en:"Python & Django"}, d:{fr:"Python, Django et Django REST Framework, FastAPI, API et applications web, scripts d'automatisation, tests avec pytest.", en:"Python, Django and Django REST Framework, FastAPI, APIs and web applications, automation scripts, pytest testing."}},
+    {i:"🤖", t:{fr:"Intelligence artificielle", en:"Artificial intelligence"}, d:{fr:"Usage et intégration d'agents et d'outils d'IA (Claude, Gemini, ChatGPT), AWS Q Developer, IA générative, LLM, RAG, LangChain, prompt engineering.", en:"Use and integration of AI agents and tools (Claude, Gemini, ChatGPT), AWS Q Developer, generative AI, LLMs, RAG, LangChain, prompt engineering."}},
+    {i:"☁️", t:{fr:"Cloud & DevOps", en:"Cloud & DevOps"}, d:{fr:"AWS (EC2, RDS, S3, Lambda…), Azure, GCP, Docker, Kubernetes, Ansible, CI/CD GitHub / GitLab.", en:"AWS (EC2, RDS, S3, Lambda…), Azure, GCP, Docker, Kubernetes, Ansible, GitHub / GitLab CI/CD."}},
+    {i:"🧩", t:{fr:"Architecture & qualité", en:"Architecture & quality"}, d:{fr:"Microservices, orienté événements, SOLID, DRY, KISS, Clean architecture, SonarQube, revue de code assistée par IA.", en:"Microservices, event-driven, SOLID, DRY, KISS, Clean architecture, SonarQube, AI-assisted code review."}},
+    {i:"🛡️", t:{fr:"API & sécurité applicative", en:"APIs & application security"}, d:{fr:"Spring Security, OAuth2 / JWT, OpenAPI / Swagger, bonnes pratiques OWASP, intégration sécurisée d'API tierces.", en:"Spring Security, OAuth2 / JWT, OpenAPI / Swagger, OWASP best practices, secure third-party API integration."}},
+    {i:"🔐", t:{fr:"Sécurité & agilité", en:"Security & agility"}, d:{fr:"Bonnes pratiques de code sécurisé, participation au CTF NorthSec, Scrum, Kanban, SAFe, leadership et mentorat.", en:"Secure coding practices, NorthSec CTF participation, Scrum, Kanban, SAFe, leadership and mentoring."}}
+  ],
+  skills: [
+    {t:{fr:"Langages & frameworks", en:"Languages & frameworks"}, c:["Java 8+","Spring Boot","Spring Data JPA","Hibernate","PHP 5+","Laravel 7+","Python","Django","Django REST Framework","FastAPI","Flask","SQL","NoSQL","JavaScript","TypeScript","Node.js","ReactJS","AngularJS","TailwindCSS","Bootstrap / SASS","Ajax","Thymeleaf","Kotlin","HTML","CSS"]},
+    {t:{fr:"Architecture & conception", en:"Architecture & design"}, c:["Microservices","REST API","Pub/Sub","WSDL","JSON","POO / OOP","SOLID","DRY","KISS","Clean Architecture","Design Patterns","DDD","Event-driven","OpenAPI / Swagger","MERISE","UML"]},
+    {t:{fr:"Cloud & DevOps", en:"Cloud & DevOps"}, c:["AWS EC2","RDS","S3","Route 53","ELB","ECR","Lambda","Azure","GCP","Docker","Kubernetes","Jenkins","Maven","Ansible","GitHub","GitLab","Gitflow","Bitbucket","GitHub Actions","Terraform","Nginx","CloudWatch","Linux"]},
+    {t:{fr:"Qualité logicielle", en:"Software quality"}, c:["JUnit","PHPUnit","Pest","Laravel Dusk","Postman","SonarQube","Jenkins","pytest","Mockito","TDD","Analyse de code par IA / AI code analysis"]},
+    {t:{fr:"Données & messagerie", en:"Data & messaging"}, c:["MS SQL","PostgreSQL","MySQL","MongoDB","RabbitMQ","Beanstalkd","Laravel Queues","Redis","Elasticsearch","Kafka"]},
+    {t:{fr:"Sécurité applicative", en:"Application security"}, c:["Spring Security","OAuth2","JWT","OWASP Top 10","HTTPS / TLS","Gestion des secrets / Secrets management"]},
+    {t:{fr:"IA & cybersécurité", en:"AI & cybersecurity"}, c:["Claude","Gemini","ChatGPT","AI agents","AWS Q Developer","Generative AI","Prompt Engineering","LLM","RAG","LangChain","Amazon Bedrock","Vector databases","MCP","Secure coding","CTF"]},
+    {t:{fr:"Observabilité & outils", en:"Observability & tools"}, c:["ELK Stack","Zabbix","Portainer","Grafana","Prometheus","IntelliJ","Eclipse","Spring Tools Suite","VS Code","WebStorm","Cursor","Jira","Trello"]},
+    {t:{fr:"Méthodologies", en:"Methodologies"}, c:["Agile Scrum","Kanban","SAFe","Leadership","Mentorat / Mentoring","Code review","Documentation"]}
+  ],
+  exp: [
+    {role:{fr:"Développeur Full Stack", en:"Full Stack Developer"}, org:"Novitek International — Montréal, Canada", date:{fr:"Janv. 2026 – Juin 2026 · Contrat 6 mois", en:"Jan 2026 – Jun 2026 · 6-month contract"},
+     b:{fr:[
+       "Recueillir, analyser et formaliser les besoins de développement applicatif.",
+       "Choisir les outils et technologies adaptés à l'environnement existant.",
+       "Développer et optimiser les solutions existantes, appliquer les bonnes pratiques et écrire des requêtes SQL performantes.",
+       "Élaborer les tests (techniques et automatisés avec Jenkins) et déployer en environnement de test sur AWS.",
+       "Maintenir, documenter et former les utilisateurs pour assurer l'adoption des solutions.",
+       "Résoudre des incidents complexes en production et réduire les délais de rétablissement grâce à l'analyse des causes racines."],
+     en:[
+       "Gather, analyse and formalise application development requirements.",
+       "Select the tools and technologies suited to the existing environment.",
+       "Develop and optimise existing solutions, apply best practices and write efficient SQL queries.",
+       "Build technical and automated tests (Jenkins) and deploy to a test environment on AWS.",
+       "Maintain, document and train users to ensure solid adoption of the solutions.",
+       "Resolve complex production incidents and shorten recovery times through root-cause analysis."]},
+     tags:["Java","Spring Boot","PHP","Laravel","AWS","Jenkins","SQL"]},
+    {role:{fr:"Développeur Full Stack & administrateur de bases de données", en:"Full Stack Developer & Database Administrator"}, org:"Pari Mutuel Urbain Camerounais (PMUC) — Douala, Cameroun", date:{fr:"Mars 2021 – Août 2025", en:"Mar 2021 – Aug 2025"},
+     b:{fr:[
+       "Analyser les besoins d'affaires et développer des solutions compatibles avec l'écosystème existant pour plus de 2 000 utilisateurs actifs par jour.",
+       "Développer et maintenir des applications d'entreprise en Java / Spring Boot et en PHP / Laravel soutenant des opérations de jeux virtuels générant plus de 2 milliards de XAF de chiffre d'affaires.",
+       "Intégrer de façon sécuritaire des API de compagnies tierces pour le suivi interne.",
+       "Créer des comptes AWS (EC2, Step Functions / Lambda, RDS…) et déployer en CI/CD en production et en test.",
+       "Tester avec Postman, collaborer avec les parties prenantes et améliorer la couverture de tests.",
+       "Participer aux rencontres Agile, documenter le cycle de vie des applications et encadrer des stagiaires."],
+     en:[
+       "Analyse business needs and build solutions compatible with the existing ecosystem for 2,000+ daily active users.",
+       "Develop and maintain enterprise applications in Java / Spring Boot and PHP / Laravel supporting virtual gaming operations generating over 2 billion XAF in revenue.",
+       "Securely integrate third-party company APIs for internal monitoring.",
+       "Create AWS accounts (EC2, Step Functions / Lambda, RDS…) and deploy with CI/CD to production and test environments.",
+       "Test with Postman, collaborate with stakeholders and improve test coverage.",
+       "Take part in Agile ceremonies, document the application lifecycle and mentor interns."]},
+     tags:["Java","Spring Boot","Thymeleaf","Laravel","AWS","CI/CD","Postman"]},
+    {role:{fr:"Développeur Web et mobile", en:"Web & Mobile Developer"}, org:"Nexah SARL — Douala, Cameroun", date:{fr:"Mars 2020 – Févr. 2021", en:"Mar 2020 – Feb 2021"},
+     b:{fr:[
+       "Étudier en profondeur l'environnement existant (basé sur AWS).",
+       "Développer des solutions web (Java Spring Boot / PHP Laravel) et mobiles (Kotlin, Android) pour des clients B2B et B2C.",
+       "Concevoir une plateforme de gestion des tâches et une solution de suivi commercial avec indicateurs de performance.",
+       "Développer les API et microservices d'un CRM (application mobile + plateforme d'administration).",
+       "Gérer le code sur GitLab Enterprise et déployer sur AWS EC2.",
+       "Collaborer en Scrum avec plusieurs équipes et élaborer les tests."],
+     en:[
+       "Conduct an in-depth study of the existing AWS-based environment.",
+       "Build web (Java Spring Boot / PHP Laravel) and mobile (Kotlin, Android) solutions for B2B and B2C clients.",
+       "Design a task-management platform and a sales-tracking solution with performance indicators.",
+       "Develop APIs and microservices for a CRM (mobile app + admin platform).",
+       "Manage code on GitLab Enterprise and deploy on AWS EC2.",
+       "Collaborate in Scrum with several teams and write tests."]},
+     tags:["Spring Boot","Laravel","Kotlin","Android","REST","GitLab","EC2"]}
+  ],
+  projects: [
+    {name:"INFOVENDEURS", link:"infovendeurs.pmuc.net", stack:"Spring Boot · Laravel · HTML · CSS · JavaScript · AWS",
+     d:{fr:"Application de distribution de livrets pour plus de 2 000 vendeurs de PMUC, déployée sur tout le territoire.", en:"Booklet distribution application for 2,000+ PMUC sellers, deployed nationwide."},
+     b:{fr:["Conception UI et tests de réactivité pour une meilleure expérience.","API documentées, fonctionnalités CRUD testées, requêtes ORM et SQL.","Administration AWS : instances EC2, sécurité, réseau, déploiement et évolution."],
+        en:["UI design and responsiveness testing for a better experience.","Documented APIs, tested CRUD features, ORM and SQL queries.","AWS administration: EC2 instances, security, networking, deployment and evolution."]}},
+    {name:"EyesOpen Security", link:"eyesopensecurity.com", stack:"HTML · CSS · JavaScript · SQL",
+     d:{fr:"Développement complet du site officiel de la conférence internationale EOCON.", en:"Full development of the official website of the EOCON international conference."},
+     b:{fr:["Expérience UI/UX, tests et mise en ligne.","Structuration de la base de données et migration vers SQL.","Documentation, suivi du code et correction des bogues."],
+        en:["UI/UX experience, testing and online deployment.","Database structuring and migration to SQL.","Documentation, code tracking and bug fixing."]}}
+  ],
+  edu: [
+    {t:{fr:"Baccalauréat en génie logiciel", en:"Bachelor's in Software Engineering"}, o:{fr:"École Normale Supérieure Polytechnique, Douala — Évaluation comparative des études hors Québec (MIFI, 2026)", en:"École Normale Supérieure Polytechnique, Douala — Comparative evaluation of studies outside Québec (MIFI, 2026)"}, y:"2015 – 2020"}
+  ],
+  certs: [
+    {t:"AWS Cloud Practitioner", y:"2025"},
+    {t:"AWS Q Developer and Prompt Engineering", y:"2025"},
+    {t:"AWS Generative AI Practitioner", y:"2025"},
+    {t:"Scrum Foundation Professional Certification (SFPC)", y:"2025"}
+  ],
+  vol: [
+    {t:{fr:"NorthSec 2026 — membre actif du collectif (IA & cybersécurité), compétition CTF", en:"NorthSec 2026 — active member of the collective (AI & cybersecurity), CTF competition"}},
+    {t:{fr:"GoSec 2026 — membre du staff", en:"GoSec 2026 — staff member"}}
+  ]
+},
+
+/* ======================= TI ======================= */
+ti: {
+  docTitle: {fr:"Benjamin ELONGUE — Technicien informatique senior", en:"Benjamin ELONGUE — Senior IT Technician"},
+  title: {fr:"Technicien informatique senior · Analyste TIC", en:"Senior IT Technician · ICT Analyst"},
+  roles: {
+    fr:["Technicien informatique senior","Spécialiste services & expérience utilisateur","Support N1 / N2","Microsoft 365 · Intune · Exchange","Infrastructure & réseaux"],
+    en:["Senior IT Technician","Services & User Experience Specialist","L1 / L2 Support","Microsoft 365 · Intune · Exchange","Infrastructure & Networks"]
+  },
+  summary: {
+    fr:"Analyste en technologies de l'information et de la communication, spécialiste des services et de l'expérience utilisateur depuis plus de {Y} ans : accompagnement des utilisateurs, administration système, gestion d'infrastructures TI et de parcs informatiques. Solide expertise de l'environnement Windows, en particulier Outlook avec serveur Exchange. Résolution rapide et optimale des incidents de niveau 1 et 2, sur site et à distance.",
+    en:"Information and communication technology analyst specialising in services and user experience for over {Y} years: user support, system administration, IT infrastructure and device fleet management. Strong expertise in the Windows environment, particularly Outlook with Exchange server. Fast, optimal resolution of level 1 and 2 incidents, on site and remotely."
+  },
+  stats: [
+    {n:YEARS, s:"+", l:{fr:"années d'expérience", en:"years of experience"}},
+    {n:1200, s:"+", l:{fr:"ordinateurs gérés et mis à niveau", en:"computers managed and upgraded"}},
+    {n:3000, s:"+", l:{fr:"utilisateurs accompagnés", en:"users supported"}},
+    {n:99, s:"%", l:{fr:"taux de résolution des interventions", en:"intervention resolution rate"}}
+  ],
+  highlights: [
+    {i:"🛠️", t:{fr:"Support N1 / N2", en:"L1 / L2 support"}, d:{fr:"Résolution rapide des incidents sur site et à distance, escalade vers le niveau 2, documentation et suivi des tickets.", en:"Fast incident resolution on site and remotely, escalation to level 2, ticket documentation and follow-up."}},
+    {i:"📬", t:{fr:"Microsoft 365 & Exchange", en:"Microsoft 365 & Exchange"}, d:{fr:"Outlook / Exchange, Active Directory, Azure, Entra ID, Intune, SCCM, Teams, SharePoint.", en:"Outlook / Exchange, Active Directory, Azure, Entra ID, Intune, SCCM, Teams, SharePoint."}},
+    {i:"🖥️", t:{fr:"Gestion de parc informatique", en:"Device fleet management"}, d:{fr:"Mise à niveau et inventaire de plus de 1 200 ordinateurs, déploiement d'OS et de logiciels métiers.", en:"Upgrade and inventory of 1,200+ computers, OS and business software deployment."}},
+    {i:"🌐", t:{fr:"Réseaux & serveurs", en:"Networks & servers"}, d:{fr:"Windows Server 2016 à 2025, VPN, LAN, WAN, Wi-Fi, pare-feu, DNS, DHCP, virtualisation Hyper-V / VMware.", en:"Windows Server 2016 to 2025, VPN, LAN, WAN, Wi-Fi, firewalls, DNS, DHCP, Hyper-V / VMware virtualisation."}},
+    {i:"📊", t:{fr:"Supervision & rapports", en:"Monitoring & reporting"}, d:{fr:"PRTG, SCCM, Intune, GLPI : surveillance en temps réel, bilans de santé, tableaux de bord et rapports statistiques.", en:"PRTG, SCCM, Intune, GLPI: real-time monitoring, health checks, dashboards and statistical reports."}},
+    {i:"🎓", t:{fr:"Sens du service & formation", en:"Service mindset & training"}, d:{fr:"Qualité, efficacité, formation des utilisateurs et des parties prenantes, travail d'équipe et rigueur.", en:"Quality, efficiency, training of users and stakeholders, teamwork and rigour."}}
+  ],
+  skills: [
+    {t:{fr:"Support & service à l'utilisateur", en:"Support & user service"}, c:["Support N1","Support N2","Sur site / On site","À distance / Remote","Formation utilisateurs / User training","Documentation","Maintenance préventive / Preventive maintenance","ITIL","Gestion des actifs / Asset management","Assistance à distance / Remote assistance"]},
+    {t:{fr:"Écosystème Microsoft", en:"Microsoft ecosystem"}, c:["Microsoft 365","Outlook","Exchange","Active Directory","Azure","Entra ID","Intune","SCCM","Teams","SharePoint","Bureau à distance / RDP"]},
+    {t:{fr:"Serveurs & virtualisation", en:"Servers & virtualisation"}, c:["Windows Server 2016","2019","2022","2025","Hyper-V","VMware","VirtualBox","Docker","Veeam"]},
+    {t:{fr:"Réseautique", en:"Networking"}, c:["VPN","LAN","WAN","Wi-Fi","Ethernet","Pare-feu / Firewall","TCP / UDP","DNS","DHCP","Switch","Routeur / Router","Winbox"]},
+    {t:{fr:"ITSM, supervision & organisation", en:"ITSM, monitoring & organisation"}, c:["ServiceNow","GLPI","MS Intune","Citrix","PRTG","JIRA","Confluence"]},
+    {t:{fr:"Systèmes & équipements", en:"Systems & devices"}, c:["Windows","macOS","Linux","Ubuntu","Android","iOS","Imprimantes / Printers","Scanners","Cisco Desk","Logitech","VoIP","Tablettes / Tablets"]},
+    {t:{fr:"Automatisation & sécurité", en:"Automation & security"}, c:["PowerShell","Scripts Bash","Python","Group Policy (GPO)","Windows Autopilot","MFA","Microsoft Defender","Gestion des correctifs / Patch management","Sauvegarde & restauration / Backup & restore","Power Automate"]},
+    {t:{fr:"Hébergement & administration", en:"Hosting & administration"}, c:["Microsoft 365 & Azure","OVH","Hostinger"]}
+  ],
+  exp: [
+    {role:{fr:"Technicien en soutien technologique", en:"Technology Support Technician"}, org:"Novitek International — Canada", date:{fr:"Janv. 2026 – Juin 2026 · Contrat", en:"Jan 2026 – Jun 2026 · Contract"},
+     b:{fr:[
+       "Assurer le suivi des utilisateurs aux niveaux 1 et 2 ; remonter, documenter et résoudre les incidents.",
+       "Analyser les besoins et proposer des configurations assurant une bonne qualité d'utilisation des équipements.",
+       "Mettre en place des architectures réseau, assurer les configurations et le suivi nécessaires.",
+       "Installer de nouveaux serveurs et mettre à niveau les existants ; installer et configurer matériels et logiciels.",
+       "Mettre en place le suivi en temps réel de l'état du parc (Exchange, SCCM).",
+       "Former et accompagner les utilisateurs sur site et à distance ; participer aux rencontres d'équipe et ateliers."],
+     en:[
+       "Support users at levels 1 and 2; escalate, document and resolve incidents.",
+       "Analyse needs and propose configurations ensuring a good user experience with IT equipment.",
+       "Set up network architectures and provide the required configuration and follow-up.",
+       "Install new servers and upgrade existing ones; install and configure hardware and software.",
+       "Implement real-time monitoring of the device fleet (Exchange, SCCM).",
+       "Train and support users on site and remotely; take part in team meetings and workshops."]},
+     tags:["Exchange","SCCM","Windows Server","Réseau / Network","N1 / N2"]},
+    {role:{fr:"Analyste TI & gestionnaire de parc informatique", en:"IT Analyst & Device Fleet Manager"}, org:"Pari Mutuel Urbain Camerounais (PMUC)", date:"2021 – 2025",
+     b:{fr:[
+       "Mettre à niveau un parc vieillissant de plus de 1 200 ordinateurs et équipements, et tenir l'inventaire à jour.",
+       "Installer et mettre à niveau OS (Windows, macOS, Linux) et logiciels métiers, plus modernes et sécurisés.",
+       "Soutenir plus de 3 000 utilisateurs sur tout le territoire national ; recueillir les besoins par appel, courriel, portail ou en personne.",
+       "Installer et gérer les serveurs de flux de travail, d'automatisation et le système de billetterie ; traiter les demandes d'accès Microsoft.",
+       "Superviser le parc en temps réel avec SCCM, Intune, PRTG et GLPI.",
+       "Déployer réseaux (Wi-Fi, LAN, WAN, pare-feu) et environnements virtuels (Hyper-V, DHCP, DNS, AD) ; former à Office et aux nouveaux équipements (VoIP, tablettes, HarmonyOS…)."],
+     en:[
+       "Upgrade an ageing fleet of 1,200+ computers and equipment, and keep the inventory up to date.",
+       "Install and upgrade operating systems (Windows, macOS, Linux) and business software to more modern, secure versions.",
+       "Support 3,000+ users nationwide; collect needs by phone, email, portal or in person.",
+       "Install and manage workflow and automation servers and the ticketing system; process Microsoft access requests.",
+       "Monitor the fleet in real time with SCCM, Intune, PRTG and GLPI.",
+       "Deploy networks (Wi-Fi, LAN, WAN, firewall) and virtual environments (Hyper-V, DHCP, DNS, AD); train on Office and new equipment (VoIP, tablets, HarmonyOS…)."]},
+     tags:["SCCM","Intune","PRTG","GLPI","Hyper-V","Active Directory"]},
+    {role:{fr:"Consultant TI", en:"IT Consultant"}, org:"Beryo International", date:"2020 – 2021",
+     b:{fr:[
+       "Mettre en place le parc informatique, auparavant inexistant dans l'entreprise.",
+       "Analyser les besoins et proposer les configurations pour 80 utilisateurs répartis dans 6 régions.",
+       "Mettre en place le suivi en temps réel du parc avec GLPI ; installer Microsoft 365 et Adobe PDF (licence professionnelle).",
+       "Installer imprimantes, kits radio, télévision et autres équipements.",
+       "Résoudre les interventions quotidiennes avec un taux de réussite de 99 %, avec tickets et rapports quotidiens."],
+     en:[
+       "Set up the IT infrastructure, which did not previously exist in the company.",
+       "Analyse needs and propose configurations for 80 users across 6 regions.",
+       "Implement real-time fleet monitoring with GLPI; install Microsoft 365 and Adobe PDF (professional licence).",
+       "Install printers, radio kits, television and other equipment.",
+       "Resolve daily interventions with a 99% success rate, with daily tickets and reports."]},
+     tags:["GLPI","Microsoft 365","Support","99 %"]}
+  ],
+  projects: [],
+  edu: [
+    {t:{fr:"Baccalauréat en technologies de l'information et de la communication", en:"Bachelor's in Information and Communication Technology"}, o:{fr:"École Normale Supérieure Polytechnique, Douala — Évaluation comparative des études hors Québec (MIFI, 2026)", en:"École Normale Supérieure Polytechnique, Douala — Comparative evaluation of studies outside Québec (MIFI, 2026)"}, y:"2026"}
+  ],
+  certs: [],
+  vol: [
+    {t:{fr:"NorthSec 2026 & GoSec 2026 — assistance technique aux utilisateurs, membre du staff et tâches connexes", en:"NorthSec 2026 & GoSec 2026 — technical user assistance, staff member and related tasks"}}
+  ]
+}
+};
+
+/* ========================= LOGIC ========================= */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const val = (o, lang) => (o && typeof o === "object" && !Array.isArray(o)) ? o[lang] : o;
+
+let lang = "fr", profileKey = "dev", typeToken = 0, io = null;
+
+try { const s = localStorage.getItem("lang"); if (s === "fr" || s === "en") lang = s; } catch(e){}
+
+/* THEME : par défaut celui du système ; le choix manuel est mémorisé */
+const PAL = {rgb:"37,99,235", dot:.5, line:.14};
+const themeMQ = matchMedia("(prefers-color-scheme: dark)");
+let savedTheme = null;
+try { const t = localStorage.getItem("theme"); if (t === "dark" || t === "light") savedTheme = t; } catch(e){}
+function currentTheme(){ return document.documentElement.dataset.theme === "dark" ? "dark" : "light"; }
+function updateThemeBtn(){
+  const b = document.getElementById("themeBtn"); if (!b) return;
+  const dark = currentTheme() === "dark";
+  const label = lang === "fr" ? (dark ? "Passer au thème clair" : "Passer au thème sombre")
+                              : (dark ? "Switch to light theme" : "Switch to dark theme");
+  b.title = label; b.setAttribute("aria-label", label);
+}
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  const cs = getComputedStyle(document.documentElement);
+  PAL.rgb  = cs.getPropertyValue("--particle-rgb").trim() || PAL.rgb;
+  PAL.dot  = parseFloat(cs.getPropertyValue("--particle-dot")) || PAL.dot;
+  PAL.line = parseFloat(cs.getPropertyValue("--particle-line")) || PAL.line;
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.content = cs.getPropertyValue("--bg").trim();
+  updateThemeBtn();
+}
+themeMQ.addEventListener("change", e => { if (!savedTheme) applyTheme(e.matches ? "dark" : "light"); });
+
+function getProfileKey(){
+  return location.hash.replace("#","").trim().toLowerCase() === "ti" ? "ti" : "dev";
+}
+
+function render(){
+  const P = PROFILES[profileKey], T = UI[lang];
+  document.documentElement.lang = lang;
+  document.title = P.docTitle[lang];
+  document.documentElement.dataset.profile = profileKey;
+
+  // nav
+  const sections = ["about","skills","exp"].concat(P.projects.length ? ["proj"] : [], ["edu","contact"]);
+  $("#navlinks").innerHTML = sections.map(s => `<li><button class="link" data-go="${s}">${T.nav[s]}</button></li>`).join("");
+  $$("[data-lang]").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
+  updateThemeBtn();
+
+  const head = (id) => `<div class="sec-head"><small>${T.secs[id][0]}</small><h2>${T.secs[id][1]}</h2></div>`;
+
+  const hero = `
+  <section class="hero" id="hero">
+    <div class="wrap hero-grid">
+      <div class="stagger">
+        <span class="badge"><span class="dot"></span>${T.avail}</span>
+        <h1>${PERSON.name.split(" ")[0]} <span class="grad">${PERSON.name.split(" ")[1]}</span></h1>
+        <div class="title-line">${P.title[lang]}</div>
+        <div class="typed" id="typed">${P.roles[lang].slice(1).join("  |  ")}</div>
+        <p class="lead">${fx(P.summary[lang])}</p>
+        <div class="cta">
+          <button class="btn primary" data-go="contact">${T.contactBtn} →</button>
+          <a class="btn ghost" href="mailto:${PERSON.email}">✉ ${T.emailBtn}</a>
+        </div>
+      </div>
+      <div class="photo-wrap" id="photoWrap"><img id="photo" alt="${PERSON.name}"></div>
+    </div>
+  </section>
+  <div class="wrap"><div class="stats" id="stats">
+    ${P.stats.map(s => `<div class="stat reveal"><b data-n="${s.n}" data-s="${val(s.s,lang)}">0</b><span>${s.l[lang]}</span></div>`).join("")}
+  </div></div>`;
+
+  const about = `<section class="sec" id="about"><div class="wrap">${head("about")}
+    <div class="highlights">${P.highlights.map(h => `
+      <div class="card hl reveal"><div class="ico">${h.i}</div><h3>${h.t[lang]}</h3><p>${h.d[lang]}</p></div>`).join("")}
+    </div></div></section>`;
+
+  const skills = `<section class="sec" id="skills"><div class="wrap">${head("skills")}
+    <div class="skills">${P.skills.map(g => `
+      <div class="card reveal"><h3>▸ ${g.t[lang]}</h3><div class="chips">
+        ${g.c.map((c,i) => `<span class="chip" style="transition-delay:${i*35}ms">${c}</span>`).join("")}
+      </div></div>`).join("")}
+    </div></div></section>`;
+
+  const exp = `<section class="sec" id="exp"><div class="wrap">${head("exp")}
+    <div class="timeline">${P.exp.map(j => `
+      <div class="job reveal"><div class="card">
+        <div class="job-top"><div><h3>${j.role[lang]}</h3><div class="org">${j.org}</div></div><span class="date">${val(j.date,lang)}</span></div>
+        <ul>${j.b[lang].map(x => `<li>${x}</li>`).join("")}</ul>
+        <div class="tags">${j.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+      </div></div>`).join("")}
+    </div></div></section>`;
+
+  const proj = P.projects.length ? `<section class="sec" id="proj"><div class="wrap">${head("proj")}
+    <div class="projects">${P.projects.map(p => `
+      <div class="card proj reveal">
+        <h3>${p.name}<span class="link">↗ ${p.link}</span></h3>
+        <div class="tags" style="margin:.2rem 0 .8rem"><span class="tag">${p.stack}</span></div>
+        <p>${p.d[lang]}</p>
+        <ul>${p.b[lang].map(x => `<li>${x}</li>`).join("")}</ul>
+      </div>`).join("")}
+    </div></div></section>` : "";
+
+  const eduBlocks = [
+    `<div class="card reveal"><h3 class="t">🎓 ${T.edu}</h3><ul class="list">${P.edu.map(e => `
+      <li><div><b>${e.t[lang]}</b><small>${e.o[lang]}</small></div><span class="y">${e.y}</span></li>`).join("")}</ul></div>`,
+    P.certs.length ? `<div class="card reveal"><h3 class="t">🏅 ${T.cert}</h3><ul class="list">${P.certs.map(c => `
+      <li><div><b>${c.t}</b></div><span class="y">${c.y}</span></li>`).join("")}</ul></div>` : "",
+    `<div class="card reveal"><h3 class="t">🤝 ${T.vol}</h3><ul class="list">${P.vol.map(v => `<li><div>${v.t[lang]}</div></li>`).join("")}</ul></div>`,
+    `<div class="card reveal"><h3 class="t">🗣️ ${T.lang}</h3><ul class="list">
+      <li><b>Français</b><span class="y">${lang==="fr"?"Natif":"Native"}</span></li>
+      <li><b>English</b><span class="y">${lang==="fr"?"Professionnel":"Professional"}</span></li></ul></div>`
+  ].join("");
+  const edu = `<section class="sec" id="edu"><div class="wrap">${head("edu")}<div class="two">${eduBlocks}</div></div></section>`;
+
+  const contact = `<section class="sec" id="contact"><div class="wrap">${head("contact")}
+    <div class="contact">
+      <a class="card reveal" href="mailto:${PERSON.email}"><div class="ico">✉️</div><b>${T.mail}</b><span>${PERSON.email}</span></a>
+      <a class="card reveal" href="tel:+1${PERSON.phone.replace(/\s/g,"")}"><div class="ico">📞</div><b>${T.tel}</b><span>${PERSON.phone}</span></a>
+      <div class="card reveal"><div class="ico">📍</div><b>${T.loc}</b><span>${PERSON.location[lang]}</span></div>
+    </div></div></section>`;
+
+  $("#app").innerHTML = hero + about + skills + exp + proj + edu + contact;
+  $("#footer").innerHTML = `© ${new Date().getFullYear()} ${PERSON.name} · ${T.rights}<br>${T.ref}`;
+
+  setupReveal();
+  setupSpotlight();
+  loadPhoto();
+}
+
+/* scroll reveal + counters */
+function setupReveal(){
+  if (io) io.disconnect();
+  io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("in");
+      $$(".chip", e.target).forEach(c => c.parentElement.classList.add("in"));
+      const b = $("b[data-n]", e.target);
+      if (b) countUp(b);
+      io.unobserve(e.target);
+    });
+  }, {threshold:.12, rootMargin:"0px 0px -40px 0px"});
+  $$(".reveal").forEach(el => io.observe(el));
+}
+function countUp(el){
+  const n = +el.dataset.n, s = el.dataset.s || "";
+  if (reduceMotion){ el.textContent = n.toLocaleString(lang) + s; return; }
+  const dur = 1600, t0 = performance.now();
+  (function step(t){
+    const p = Math.min((t - t0)/dur, 1), e = 1 - Math.pow(1-p, 3);
+    el.textContent = Math.round(n*e).toLocaleString(lang) + s;
+    if (p < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* card spotlight following the cursor */
+function setupSpotlight(){
+  $$(".card").forEach(c => c.addEventListener("pointermove", e => {
+    const r = c.getBoundingClientRect();
+    c.style.setProperty("--mx", (e.clientX - r.left) + "px");
+    c.style.setProperty("--my", (e.clientY - r.top) + "px");
+  }));
+}
+
+/* optional photo: shown only if the file exists next to this HTML file */
+function loadPhoto(){
+  const names = ["photo.jpg","photo.jpeg","photo.png","photo.webp"];
+  const hero = $("#hero"), img = $("#photo");
+  (function tryNext(i){
+    if (i >= names.length) return;           // no photo found -> nothing displayed
+    const probe = new Image();
+    probe.onload = () => { img.src = names[i]; hero.classList.add("has-photo"); };
+    probe.onerror = () => tryNext(i+1);
+    probe.src = names[i];
+  })(0);
+}
+
+/* navigation, language, routing */
+document.addEventListener("click", e => {
+  if (e.target.closest("#themeBtn")){
+    savedTheme = currentTheme() === "dark" ? "light" : "dark";
+    try { localStorage.setItem("theme", savedTheme); } catch(err){}
+    applyTheme(savedTheme);
+    return;
+  }
+  const go = e.target.closest("[data-go]");
+  if (go){ const t = document.getElementById(go.dataset.go); if (t) t.scrollIntoView({behavior:"smooth"}); }
+  const lb = e.target.closest("[data-lang]");
+  if (lb && lb.dataset.lang !== lang){
+    lang = lb.dataset.lang;
+    try { localStorage.setItem("lang", lang); } catch(err){}
+    render();
+  }
+});
+addEventListener("hashchange", () => {
+  const k = getProfileKey();
+  if (k !== profileKey){ profileKey = k; render(); scrollTo({top:0}); }
+});
+
+/* header progress bar + active link */
+addEventListener("scroll", () => {
+  const h = document.documentElement;
+  $("#progress").style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + "%";
+  let cur = "";
+  ["about","skills","exp","proj","edu","contact"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < innerHeight*.4) cur = id;
+  });
+  $$("#navlinks .link").forEach(b => b.classList.toggle("active", b.dataset.go === cur));
+}, {passive:true});
+
+/* background particle network */
+(function(){
+  if (reduceMotion) return;
+  const cv = $("#bg-canvas"), ctx = cv.getContext("2d");
+  let W, H, pts = [];
+  function resize(){
+    W = cv.width = innerWidth; H = cv.height = innerHeight;
+    const n = Math.min(70, Math.floor(W*H/22000));
+    pts = Array.from({length:n}, () => ({x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35}));
+  }
+  resize(); addEventListener("resize", resize);
+  (function loop(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach((p,i) => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x<0||p.x>W) p.vx*=-1; if (p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,6.283); ctx.fillStyle=`rgba(${PAL.rgb},${PAL.dot})`; ctx.fill();
+      for (let j=i+1;j<pts.length;j++){
+        const q = pts[j], d = Math.hypot(p.x-q.x, p.y-q.y);
+        if (d<140){ ctx.strokeStyle=`rgba(${PAL.rgb},${PAL.line*(1-d/140)})`; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+      }
+    });
+    requestAnimationFrame(loop);
+  })();
+})();
+
+profileKey = getProfileKey();
+applyTheme(savedTheme || (themeMQ.matches ? "dark" : "light"));
+render();
+</script>
 </body>
 </html>
