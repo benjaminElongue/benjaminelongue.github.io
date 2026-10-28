@@ -81,7 +81,6 @@ nav button.link:hover,nav button.link.active{color:var(--text);background:var(--
 .lang button{background:none;border:0;color:var(--muted);font:inherit;font-weight:700;font-size:.82rem;padding:.4rem .8rem;cursor:pointer;transition:.25s}
 .lang button.on{background:var(--grad);color:var(--on-grad)}
 .progress{position:absolute;bottom:-1px;left:0;height:2px;width:0;background:var(--grad)}
-@media(max-width:860px){nav ul{display:none}}
 .tools{display:flex;align-items:center;gap:.6rem}
 .theme-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--ghost-bg);color:var(--text);display:grid;place-items:center;cursor:pointer;transition:transform .3s,border-color .3s,background .3s}
 .theme-btn:hover{border-color:var(--a1);transform:rotate(18deg)}
@@ -89,6 +88,31 @@ nav button.link:hover,nav button.link.active{color:var(--text);background:var(--
 .theme-btn .i-sun{display:none}
 :root[data-theme="dark"] .theme-btn .i-sun{display:block}
 :root[data-theme="dark"] .theme-btn .i-moon{display:none}
+
+/* MOBILE : menu latéral à gauche (icône 3 barres) */
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.burger{display:none;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--ghost-bg);cursor:pointer;padding:0;position:relative;transition:border-color .25s}
+.burger:hover{border-color:var(--a1)}
+.burger span{position:absolute;left:10px;right:10px;height:2px;border-radius:2px;background:var(--text);transition:transform .3s,opacity .2s,top .3s}
+.burger span:nth-child(1){top:13px}.burger span:nth-child(2){top:19px}.burger span:nth-child(3){top:25px}
+.menu-open .burger span:nth-child(1){top:19px;transform:rotate(45deg)}
+.menu-open .burger span:nth-child(2){opacity:0}
+.menu-open .burger span:nth-child(3){top:19px;transform:rotate(-45deg)}
+.scrim,.drawer{display:none}
+@media(max-width:860px){
+  .nav>nav{display:none}
+  .burger{display:block}
+  .scrim{display:block;position:fixed;inset:0;z-index:58;background:rgba(2,10,25,.5);opacity:0;pointer-events:none;transition:opacity .3s}
+  .drawer{display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:60;width:min(290px,82vw);padding:1.2rem 1rem;background:var(--bg);border-right:1px solid var(--line);box-shadow:20px 0 50px -25px rgba(0,0,0,.5);transform:translateX(-102%);visibility:hidden;transition:transform .3s ease,visibility 0s .3s}
+  .menu-open .drawer{transform:none;visibility:visible;transition:transform .3s ease}
+  .menu-open .scrim{opacity:1;pointer-events:auto}
+  .menu-open{overflow:hidden}
+  .drawer-head{display:flex;align-items:center;gap:.7rem;padding:.2rem .4rem 1.1rem;margin-bottom:.6rem;border-bottom:1px solid var(--line);font-weight:800}
+  .drawer-head i{font-style:normal;display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:var(--grad);color:var(--on-grad);font-weight:900}
+  .drawer ul{list-style:none;display:flex;flex-direction:column;gap:.25rem}
+  .drawer button.link{width:100%;text-align:left;background:none;border:0;color:var(--muted);font:inherit;font-size:1rem;padding:.8rem 1rem;border-radius:12px;cursor:pointer;transition:.2s}
+  .drawer button.link:hover,.drawer button.link.active{color:var(--text);background:var(--soft)}
+}
 
 /* HERO */
 .hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 70px}
@@ -217,7 +241,7 @@ footer{padding:36px 0;text-align:center;color:var(--muted);border-top:1px solid 
 .lang-sel{appearance:none;-webkit-appearance:none;height:38px;border:1px solid var(--line);background:var(--ghost-bg);color:var(--text);font:inherit;font-weight:600;font-size:.85rem;padding:0 2rem 0 1rem;border-radius:999px;cursor:pointer;transition:border-color .25s}
 .lang-sel:hover,.lang-sel:focus{border-color:var(--a1);outline:none}
 .lang-sel option{background:var(--bg);color:var(--text)}
-@media(max-width:480px){.tools{gap:.4rem}.social-top{display:none}}
+@media(max-width:350px){.tools{gap:.4rem}.social-top{display:none}}
 
 /* projects */
 .proj.wide{grid-column:1/-1}
@@ -249,7 +273,10 @@ footer{padding:36px 0;text-align:center;color:var(--muted);border-top:1px solid 
 
 <header>
   <div class="wrap nav">
-    <div class="logo" title="Benjamin ELONGUE" aria-label="Benjamin ELONGUE"><i>BE</i></div>
+    <div class="nav-left">
+      <button class="burger" id="burger" type="button" aria-controls="drawer" aria-expanded="false" aria-label="Menu"><span></span><span></span><span></span></button>
+      <div class="logo" title="Benjamin ELONGUE" aria-label="Benjamin ELONGUE"><i>BE</i></div>
+    </div>
     <nav><ul id="navlinks"></ul></nav>
     <div class="tools">
       <div class="social social-top" id="socialTop"></div>
@@ -267,6 +294,12 @@ footer{padding:36px 0;text-align:center;color:var(--muted);border-top:1px solid 
   </div>
   <div class="progress" id="progress"></div>
 </header>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head"><i>BE</i><span>Benjamin ELONGUE</span></div>
+  <ul id="drawerLinks"></ul>
+</aside>
 
 <main id="app"></main>
 <footer><div class="wrap" id="footer"></div></footer>
@@ -620,6 +653,13 @@ function applyTheme(t){
 }
 themeMQ.addEventListener("change", e => { if (!savedTheme) applyTheme(e.matches ? "dark" : "light"); });
 
+/* menu latéral (mobile) */
+function setMenu(open){
+  document.body.classList.toggle("menu-open", open);
+  $("#burger").setAttribute("aria-expanded", String(open));
+  $("#drawer").setAttribute("aria-hidden", String(!open));
+}
+
 function getProfileKey(){
   return location.hash.replace("#","").trim().toLowerCase() === "ti" ? "ti" : "dev";
 }
@@ -633,6 +673,8 @@ function render(){
   // nav
   const sections = ["about","skills","exp"].concat(P.projects.length ? ["proj"] : [], ["edu","contact"]);
   $("#navlinks").innerHTML = sections.map(s => `<li><button class="link" data-go="${s}">${T.nav[s]}</button></li>`).join("");
+  $("#drawerLinks").innerHTML = $("#navlinks").innerHTML;
+  const bb = $("#burger"); bb.title = bb.ariaLabel = lang === "fr" ? "Menu" : "Menu";
   $("#langSel").value = lang;
   $("#socialTop").innerHTML =
     `<a href="${PERSON.linkedin}" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">${SVG_IN}</a>` +
@@ -793,8 +835,13 @@ document.addEventListener("click", e => {
     applyTheme(savedTheme);
     return;
   }
+  if (e.target.closest("#burger")){ setMenu(!document.body.classList.contains("menu-open")); return; }
+  if (e.target.closest("#scrim")){ setMenu(false); return; }
   const go = e.target.closest("[data-go]");
-  if (go){ const t = document.getElementById(go.dataset.go); if (t) t.scrollIntoView({behavior:"smooth"}); }
+  if (go){
+    setMenu(false);
+    const t = document.getElementById(go.dataset.go); if (t) t.scrollIntoView({behavior:"smooth"});
+  }
 });
 document.addEventListener("change", e => {
   if (e.target.id === "langSel" && e.target.value !== lang){
@@ -803,7 +850,10 @@ document.addEventListener("change", e => {
     render();
   }
 });
+addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
+addEventListener("resize", () => { if (innerWidth > 860) setMenu(false); });
 addEventListener("hashchange", () => {
+  setMenu(false);
   const k = getProfileKey();
   if (k !== profileKey){ profileKey = k; render(); scrollTo({top:0}); }
 });
@@ -817,7 +867,7 @@ addEventListener("scroll", () => {
     const el = document.getElementById(id);
     if (el && el.getBoundingClientRect().top < innerHeight*.4) cur = id;
   });
-  $$("#navlinks .link").forEach(b => b.classList.toggle("active", b.dataset.go === cur));
+  $$(".link").forEach(b => b.classList.toggle("active", b.dataset.go === cur));
 }, {passive:true});
 
 /* background particle network */
